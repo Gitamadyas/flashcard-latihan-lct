@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Flashcard HOTS Numerasi SD</title>
+<style>
+:root{--bg:#f6f4ee;--card:#fff;--ink:#1d2a2a;--mut:#5d6b6b;--acc:#0f8a6d;--back:#e4f5ee;--bd:#d9d4c7;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14201f;--card:#1f2e2d;--ink:#eef3f1;--mut:#a3b3b0;--acc:#4fd1a8;--back:#173b32;--bd:#34484a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#14201f;--card:#1f2e2d;--ink:#eef3f1;--mut:#a3b3b0;--acc:#4fd1a8;--back:#173b32;--bd:#34484a;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:16px}
+h1{font-size:1.2rem;margin:4px 0}
+.sub{color:var(--mut);font-size:.85rem;margin-bottom:12px;text-align:center}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;max-width:640px;margin-bottom:14px}
+.tabs button{border:1px solid var(--bd);background:var(--card);color:var(--ink);border-radius:999px;padding:6px 12px;font-size:.82rem;cursor:pointer}
+.tabs button.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.scene{width:100%;max-width:560px;perspective:1200px}
+.card{position:relative;width:100%;min-height:340px;transition:transform .5s;transform-style:preserve-3d;cursor:pointer}
+.card.flip{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border:1px solid var(--bd);border-radius:18px;padding:20px;display:flex;flex-direction:column;overflow:auto;background:var(--card)}
+.back{transform:rotateY(180deg);background:var(--back)}
+.tag{font-size:.75rem;color:var(--acc);font-weight:700;margin-bottom:8px}
+.q{font-size:1.02rem;line-height:1.5}
+.opts{margin:12px 0 0;padding:0;list-style:none;font-size:.95rem;line-height:1.6}
+.hint{margin-top:auto;padding-top:10px;color:var(--mut);font-size:.78rem;text-align:center}
+.ans{font-size:1.5rem;font-weight:800;color:var(--acc);margin:6px 0}
+.exp{font-size:.98rem;line-height:1.5}
+.ctrl{display:flex;gap:8px;align-items:center;margin-top:16px;flex-wrap:wrap;justify-content:center}
+.ctrl button{border:1px solid var(--bd);background:var(--card);color:var(--ink);border-radius:12px;padding:10px 16px;font-size:.95rem;cursor:pointer}
+.ctrl button.p{background:var(--acc);color:#fff;border-color:var(--acc)}
+.cnt{color:var(--mut);font-size:.9rem;min-width:70px;text-align:center}
+</style>
+</head>
+<body>
+<h1>Flashcard HOTS Numerasi SD</h1>
+<div class="sub">72 kartu. Ketuk kartu untuk melihat jawaban. Berdasarkan dokumen latihan, bukan naskah resmi panitia.</div>
+<div class="tabs" id="tabs"></div>
+<div class="scene"><div class="card" id="card"><div class="face" id="f"></div><div class="face back" id="b"></div></div></div>
+<div class="ctrl">
+<button id="prev">‹ Sebelumnya</button><span class="cnt" id="cnt"></span><button class="p" id="next">Berikutnya ›</button>
+<button id="shuf">Acak</button>
+</div>
+<script>
+var M=["Bilangan","Pecahan","Desimal & Uang","Pengukuran","Geometri","Pola & Aljabar","Analisis Data","Peluang","Penalaran"];
+// [misi, tipe, soal, pilihan, jawaban, pembahasan]
+var D=[
+[0,"PG","Angka 6, 0, 3, 9 disusun menjadi bilangan empat angka tanpa pengulangan. Berapa selisih bilangan terbesar dan terkecil?",["A. 6.561","B. 6.570","C. 6.660","D. 6.471"],"A","9.630 − 3.069 = 6.561"],
+[0,"PG","5 kardus dodol, tiap kardus 24 bungkus, tiap bungkus 8 dodol. Semua dibagi rata ke 15 kotak. Berapa dodol tiap kotak?",["A. 48","B. 56","C. 64","D. 72"],"C","5 × 24 × 8 = 960; 960 ÷ 15 = 64"],
+[0,"PG Kompleks","Pilih semua operasi yang hasilnya 30.",["A. (6 + 4) × 6","B. 6 × 4 + 6","C. 90 ÷ 3 + 3","D. 50 − 4 × 5","E. 100 ÷ 5 + 10"],"B, D, E","A = 60, B = 30, C = 33, D = 30, E = 30"],
+[1,"PG","Pak Asep punya 72 kg beras. 3/8 bagian dijual, lalu 1/3 dari sisanya diberikan ke tetangga. Berapa kg yang tersisa?",["A. 24","B. 27","C. 36","D. 30"],"D","Dijual 27, sisa 45. Diberikan 15. Sisa 30 kg"],
+[1,"PG","Hasil dari 2/3 + 3/4 − 5/6 adalah ….",["A. 5/12","B. 7/12","C. 11/12","D. 1 1/12"],"B","8/12 + 9/12 − 10/12 = 7/12"],
+[1,"PG Kompleks","Pilih semua pecahan yang senilai dengan 3/4.",["A. 9/16","B. 6/8","C. 12/16","D. 18/20","E. 15/20"],"B, C, E","9/16 bukan, 18/20 = 9/10"],
+[2,"PG","Bilangan dengan nilai terbesar adalah ….",["A. 3/4","B. 0,7","C. 0,68","D. 2/3"],"A","3/4 = 0,75; 2/3 ≈ 0,67"],
+[2,"PG","Bu Nia membeli 2,5 kg gula @Rp14.000 dan 1,5 liter minyak @Rp16.000, bayar Rp100.000. Kembaliannya ….",["A. Rp31.000","B. Rp39.000","C. Rp45.000","D. Rp41.000"],"D","35.000 + 24.000 = 59.000; 100.000 − 59.000 = 41.000"],
+[2,"PG Kompleks","Pilih semua bilangan yang berada di antara 0,3 dan 0,4.",["A. 0,29","B. 0,35","C. 0,4","D. 0,305","E. 0,399"],"B, D, E","0,29 kurang dari 0,3 dan 0,4 bukan di antara"],
+[3,"PG","Selang mengalirkan 1,5 liter per menit. Bak 90 liter penuh dalam waktu ….",["A. 45 menit","B. 1 jam","C. 1 jam 15 menit","D. 1 jam 30 menit"],"B","90 ÷ 1,5 = 60 menit"],
+[3,"PG","Berangkat 06.50, perjalanan 2 jam 45 menit, istirahat 25 menit. Tiba pukul ….",["A. 10.00","B. 09.35","C. 10.15","D. 09.50"],"A","06.50 + 2.45 = 09.35; + 25 menit = 10.00"],
+[3,"PG Kompleks","Pilih semua konversi yang benar.",["A. 0,5 jam = 50 menit","B. 1,25 L = 125 mL","C. 3,5 km = 3.500 m","D. 2 jam 15 menit = 135 menit","E. 2.400 g = 2,4 kg"],"C, D, E","0,5 jam = 30 menit; 1,25 L = 1.250 mL"],
+[4,"PG","Kolam 10 m × 6 m dikelilingi jalan setapak selebar 1 m di sisi luar. Luas jalan setapak ….",["A. 32 m²","B. 34 m²","C. 36 m²","D. 40 m²"],"C","12 × 8 − 10 × 6 = 96 − 60 = 36 m²"],
+[4,"PG","Kubus rusuk 6 cm penuh air dituang ke wadah balok beralas 12 cm × 9 cm. Tinggi air di wadah ….",["A. 1 cm","B. 2 cm","C. 3 cm","D. 4 cm"],"B","216 ÷ 108 = 2 cm"],
+[4,"PG Kompleks","Pilih semua pernyataan yang benar.",["A. Balok memiliki 8 titik sudut","B. Persegi panjang memiliki 4 simetri lipat","C. Kubus memiliki 8 rusuk","D. Persegi memiliki 4 simetri lipat","E. Kubus memiliki 6 sisi"],"A, D, E","Persegi panjang 2 simetri lipat; kubus 12 rusuk"],
+[5,"PG","Bilangan berikutnya dari pola 2, 5, 10, 17, 26, … adalah ….",["A. 35","B. 37","C. 38","D. 36"],"B","Beda 3, 5, 7, 9, 11, jadi 26 + 11 = 37"],
+[5,"PG","Gambar ke-1 dari 3 lingkaran, ke-2 dari 5, ke-3 dari 7, dst. Gambar ke-25 terdiri dari … lingkaran.",["A. 49","B. 50","C. 52","D. 51"],"D","Rumus 2n + 1; 2 × 25 + 1 = 51"],
+[5,"PG Kompleks","Pilih semua persamaan yang penyelesaiannya x = 6.",["A. 4x = 24","B. x + 9 = 14","C. 2x + 3 = 15","D. x ÷ 3 = 3","E. 7x = 35"],"A, C","B x = 5; D x = 9; E x = 5"],
+[6,"PG","Rata-rata 5 nilai adalah 82. Empat nilai pertama: 78, 85, 80, 90. Nilai kelima ….",["A. 75","B. 78","C. 77","D. 80"],"C","5 × 82 = 410; 410 − 333 = 77"],
+[6,"PG","Kelas A (20 murid) rata-rata 80, kelas B (30 murid) rata-rata 75. Rata-rata gabungan ….",["A. 77,5","B. 77","C. 78","D. 76"],"B","(1.600 + 2.250) ÷ 50 = 77"],
+[6,"PG Kompleks","Data: 3, 5, 5, 7, 8, 8, 8, 9. Pilih semua pernyataan yang benar.",["A. Modusnya 8","B. Mediannya 8","C. Mediannya 7,5","D. Selisih terbesar dan terkecil 5","E. Jumlah seluruh data 53"],"A, C, E","Median (7 + 8) ÷ 2 = 7,5; selisih 9 − 3 = 6"],
+[7,"PG","Kotak berisi 5 bola merah dan 7 biru. Setelah ditambah 4 bola merah, peluang mengambil merah ….",["A. 9/16","B. 5/12","C. 9/12","D. 1/2"],"A","Merah 9 dari total 16"],
+[7,"PG","Spinner 8 bagian sama bernomor 1 sampai 8. Peluang genap atau kelipatan 3 ….",["A. 1/2","B. 3/8","C. 7/8","D. 5/8"],"D","Yang memenuhi: 2, 3, 4, 6, 8 = 5/8"],
+[7,"PG Kompleks","Sebuah dadu dilempar sekali. Pilih semua kejadian yang peluangnya 1/2.",["A. Kelipatan 3","B. Bilangan ganjil","C. Kurang dari 3","D. Lebih dari 3","E. Bilangan prima"],"B, D, E","Ganjil 3/6; lebih dari 3 ada 3/6; prima 2, 3, 5 = 3/6"],
+[8,"PG","Bazar membeli 60 kotak dodol Rp450.000, dijual Rp9.000 per kotak, 55 kotak terjual. Keuntungannya ….",["A. Rp40.000","B. Rp35.000","C. Rp50.000","D. Rp45.000"],"D","55 × 9.000 = 495.000; 495.000 − 450.000 = 45.000"],
+[8,"PG","Rata-rata bobot 4 domba Garut 48 kg. Setelah domba kelima 58 kg bergabung, rata-ratanya ….",["A. 49 kg","B. 52 kg","C. 50 kg","D. 51 kg"],"C","(192 + 58) ÷ 5 = 50 kg"],
+[8,"PG Kompleks","Jarak rumah ke Situ Bagendit 60 km. Pilih semua pernyataan yang benar.",["A. 40 km/jam, waktu 1 jam 30 menit","B. Berangkat 07.15 dengan 40 km/jam, tiba 08.30","C. 30 km/jam, waktu 1,5 jam","D. 60 km/jam, waktu 1 jam","E. 80 km/jam, waktu 45 menit"],"A, D, E","30 km/jam butuh 2 jam; B tiba 08.45"],
+[0,"PG","Tiket dewasa Rp25.000, anak Rp15.000. Rombongan 4 dewasa dan 9 anak membayar Rp250.000. Kembaliannya ….",["A. Rp10.000","B. Rp15.000","C. Rp25.000","D. Rp35.000"],"B","100.000 + 135.000 = 235.000; 250.000 − 235.000 = 15.000"],
+[0,"PG","Nilai □ agar 5 × (□ + 3) − 12 ÷ 4 = 32 adalah ….",["A. 2","B. 3","C. 5","D. 4"],"D","5 × 7 = 35; 35 − 3 = 32, jadi □ = 4"],
+[0,"PG","Bilangan dua angka berjumlah angka 11, angka puluhannya lebih besar 3 dari angka satuan. Bilangannya ….",["A. 47","B. 83","C. 74","D. 65"],"C","Angka 7 dan 4: 7 + 4 = 11 dan 7 − 4 = 3"],
+[0,"PG Kompleks","Pilih semua pernyataan yang benar tentang bilangan 5.206.",["A. Nilai angka 5 adalah 5.000","B. Nilai angka 2 adalah 20","C. Angka 0 menempati nilai tempat ratusan","D. Dibulatkan ke ratusan terdekat menjadi 5.200","E. 5.206 = 5.000 + 200 + 6"],"A, D, E","Nilai angka 2 adalah 200; angka 0 di tempat puluhan"],
+[0,"PG Kompleks","Pulpen Rp4.000 dan buku Rp6.000. Pilih semua kombinasi yang totalnya tepat Rp40.000.",["A. 5 pulpen dan 3 buku","B. 7 pulpen dan 2 buku","C. 1 pulpen dan 6 buku","D. 8 pulpen dan 1 buku","E. 4 pulpen dan 4 buku"],"B, C, E","A = 38.000 dan D = 38.000; B, C, E = 40.000"],
+[1,"PG","Urutan pecahan dari terkecil ke terbesar: 7/12, 5/8, 2/3, 3/4 adalah pilihan ….",["A. 7/12, 5/8, 2/3, 3/4","B. 5/8, 7/12, 2/3, 3/4","C. 7/12, 2/3, 5/8, 3/4","D. 3/4, 2/3, 5/8, 7/12"],"A","Desimalnya 0,583; 0,625; 0,667; 0,75"],
+[1,"PG","Ibu punya 2 1/2 kg gula. Dipakai 3/4 kg untuk dodol dan 1 1/4 kg untuk wajit. Sisa gula ….",["A. 1/4 kg","B. 3/4 kg","C. 1/2 kg","D. 1 1/2 kg"],"C","3/4 + 1 1/4 = 2; 2 1/2 − 2 = 1/2 kg"],
+[1,"PG","3/5 murid sebuah kelas adalah putri. Jika murid putra 12 anak, murid putri ada ….",["A. 15","B. 18","C. 20","D. 30"],"B","Putra 2/5 = 12, total 30, putri 3/5 × 30 = 18"],
+[1,"PG Kompleks","Pilih semua pecahan yang lebih besar dari 1/2.",["A. 3/7","B. 5/9","C. 4/8","D. 7/12","E. 2/5"],"B, D","4/8 sama dengan 1/2; 3/7 dan 2/5 lebih kecil"],
+[1,"PG Kompleks","Bu Nia membuat 48 dodol: 1/4 dijual di bazar, 1/3 dipesan tetangga, sisanya disimpan. Pilih semua pernyataan benar.",["A. Dodol di bazar ada 12","B. Pesanan tetangga ada 14","C. Dodol disimpan ada 20","D. Dodol disimpan adalah 5/12 bagian","E. Pesanan tetangga lebih banyak dari bazar"],"A, C, D, E","Bazar 12, tetangga 16, disimpan 20 (5/12)"],
+[2,"PG","Sepatu Rp240.000 diskon 25%, lalu potongan tambahan Rp10.000. Harga yang dibayar ….",["A. Rp150.000","B. Rp160.000","C. Rp170.000","D. Rp180.000"],"C","240.000 × 75% = 180.000; 180.000 − 10.000 = 170.000"],
+[2,"PG","Pita 3,6 m dipotong-potong masing-masing 0,45 m. Banyak potongan ….",["A. 6","B. 8","C. 9","D. 10"],"B","3,6 ÷ 0,45 = 8"],
+[2,"PG","Pak Asep membeli 4 kg jeruk @Rp22.500 dan ingin untung 20% dari harga beli. Harga jual seluruhnya ….",["A. Rp18.000","B. Rp100.000","C. Rp110.000","D. Rp108.000"],"D","Modal 90.000; untung 18.000; jual 108.000"],
+[2,"PG Kompleks","Pilih semua pasangan pecahan dan desimal yang benar.",["A. 0,6 = 3/5","B. 0,04 = 1/4","C. 0,125 = 1/8","D. 1,5 = 1 2/3","E. 0,2 = 2/10"],"A, C, E","1/4 = 0,25; 1,5 = 1 1/2"],
+[2,"PG Kompleks","Belanja Rp150.000 diskon 20%. Pilih semua pernyataan yang benar.",["A. Potongan Rp20.000","B. Yang dibayar Rp120.000","C. Diskon 20% sama dengan 1/5 bagian","D. Bayar Rp200.000, kembalian Rp80.000","E. Yang dibayar Rp130.000"],"B, C, D","Potongan 30.000; bayar 120.000; kembalian 80.000"],
+[3,"PG","Motor melaju 45 km/jam selama 40 menit. Jarak yang ditempuh ….",["A. 18 km","B. 25 km","C. 28 km","D. 30 km"],"D","45 × 2/3 = 30 km"],
+[3,"PG","Beras 2,4 kg dibagi ke kantong masing-masing 300 gram. Banyak kantong ….",["A. 6","B. 7","C. 8","D. 9"],"C","2.400 ÷ 300 = 8"],
+[3,"PG","Anto bersepeda 12 km/jam selama 1 jam 30 menit. Beni berjalan 8 km/jam selama 2 jam. Pernyataan benar ….",["A. Anto lebih jauh, selisih 2 km","B. Beni lebih jauh, selisih 2 km","C. Anto lebih jauh, selisih 4 km","D. Jarak keduanya sama"],"A","Anto 18 km, Beni 16 km"],
+[3,"PG Kompleks","Kegiatan mulai 09.40 dan selesai 11.25. Pilih semua pernyataan benar.",["A. Durasinya 1 jam 45 menit","B. Durasinya 1 jam 55 menit","C. Diperpanjang 20 menit, selesai 11.45","D. Durasinya 95 menit","E. Durasinya 105 menit"],"A, C, E","1 jam 45 menit = 105 menit"],
+[3,"PG Kompleks","Mobil menempuh 120 km. Pilih semua kombinasi kecepatan dan waktu yang tepat.",["A. 60 km/jam selama 2 jam","B. 80 km/jam selama 1,5 jam","C. 40 km/jam selama 2,5 jam","D. 50 km/jam selama 3 jam","E. 25 km/jam selama 4 jam"],"A, B","C = 100 km, D = 150 km, E = 100 km"],
+[4,"PG","Keliling persegi panjang 56 cm dan panjangnya 3 kali lebarnya. Luasnya ….",["A. 112 cm²","B. 126 cm²","C. 140 cm²","D. 147 cm²"],"D","Lebar 7, panjang 21; 7 × 21 = 147"],
+[4,"PG","Sisi persegi diperbesar dari 5 cm menjadi 15 cm. Luasnya menjadi … kali semula.",["A. 9","B. 3","C. 6","D. 12"],"A","Sisi 3 kali, luas 3 × 3 = 9 kali"],
+[4,"PG","Kotak balok 20 × 15 × 10 cm diisi penuh kubus kecil berusuk 5 cm. Banyak kubus kecil ….",["A. 12","B. 18","C. 24","D. 30"],"C","4 × 3 × 2 = 24"],
+[4,"PG Kompleks","Persegi panjang 14 cm × 6 cm. Pilih semua pernyataan benar.",["A. Kelilingnya 20 cm","B. Luasnya 84 cm²","C. Kelilingnya 40 cm","D. Ukuran digandakan, keliling jadi 4 kali","E. Ukuran digandakan, luas jadi 336 cm²"],"B, C, E","Keliling jadi 2 kali; luas 28 × 12 = 336"],
+[4,"PG Kompleks","Pilih semua balok yang volumenya 72 cm³.",["A. 8 × 3 × 4 cm","B. 6 × 4 × 3 cm","C. 5 × 4 × 4 cm","D. 12 × 3 × 2 cm","E. 6 × 6 × 3 cm"],"B, D","A = 96, C = 80, E = 108"],
+[5,"PG","Nilai x yang memenuhi 3x − 7 = 2x + 5 adalah ….",["A. 12","B. 2","C. −2","D. 8"],"A","3x − 2x = 5 + 7, jadi x = 12"],
+[5,"PG","Tarif taksi online Rp8.000 ditambah Rp3.000 per km. Rina membayar Rp44.000. Jaraknya ….",["A. 10 km","B. 14 km","C. 12 km","D. 15 km"],"C","36.000 ÷ 3.000 = 12 km"],
+[5,"PG","Umur ayah 4 kali umur Dina. Lima tahun lagi jumlah umur mereka 55 tahun. Umur Dina sekarang ….",["A. 8 tahun","B. 9 tahun","C. 10 tahun","D. 12 tahun"],"B","4d + d + 10 = 55, d = 9"],
+[5,"PG Kompleks","Pilih semua pola yang memiliki beda tetap 6.",["A. 12, 18, 24, 30","B. 5, 11, 17, 23","C. 2, 4, 8, 16","D. 9, 16, 23, 30","E. 20, 25, 30, 35"],"A, B","C pola ×2; D beda 7; E beda 5"],
+[5,"PG Kompleks","Pola 4, 7, 10, 13, …. Pilih semua pernyataan benar.",["A. Rumus suku ke-n adalah 3n + 1","B. Suku ke-10 adalah 30","C. Suku ke-6 adalah 19","D. Bilangan 31 adalah suku ke-10","E. Bilangan 26 termasuk dalam pola"],"A, C, D","Suku ke-10 = 31; 3n + 1 = 26 tidak menghasilkan n bulat"],
+[6,"PG","Data: 4, 6, 6, 8, 9, 11, x. Modusnya 6 dan rata-ratanya 7. Nilai x ….",["A. 5","B. 6","C. 7","D. 4"],"A","7 × 7 = 49; 49 − 44 = 5"],
+[6,"PG","Penjualan Senin sampai Jumat: 24, 30, 18, 36, dan x. Rata-ratanya 28. Nilai x ….",["A. 28","B. 30","C. 34","D. 32"],"D","5 × 28 = 140; 140 − 108 = 32"],
+[6,"PG","Rata-rata tinggi 6 anak 140 cm. Satu anak setinggi 152 cm keluar. Rata-rata 5 anak tersisa ….",["A. 138 cm","B. 136 cm","C. 137,6 cm","D. 137 cm"],"C","840 − 152 = 688; 688 ÷ 5 = 137,6"],
+[6,"PG Kompleks","Rata-rata nilai 8 anak adalah 75. Pilih semua pernyataan yang pasti benar.",["A. Jumlah seluruh nilai 600","B. Semua anak bernilai 75","C. Nilai tertinggi 75","D. Ada anak bernilai 75 atau kurang","E. Anak bernilai 95 bergabung, rata-rata naik"],"A, D, E","8 × 75 = 600; nilai bisa bervariasi"],
+[6,"PG Kompleks","Data kegemaran 40 murid: dodol 12, wajit 8, jeruk 15, combro 5. Pilih semua pernyataan benar.",["A. Paling digemari dodol","B. Selisih terbanyak dan tersedikit 10","C. Peminat dodol 30%","D. Peminat wajit 25%","E. Rata-rata peminat tiap jajanan 10"],"B, C, E","Terbanyak jeruk (15); wajit 20%; 40 ÷ 4 = 10"],
+[7,"PG","Kantong berisi 24 kelereng. Peluang kuning 1/4, biru 1/3, sisanya merah. Banyak kelereng merah ….",["A. 8","B. 10","C. 12","D. 14"],"B","Kuning 6, biru 8, merah 24 − 14 = 10"],
+[7,"PG","Kartu bernomor 1 sampai 20. Peluang terambil kelipatan 4 atau kelipatan 5 ….",["A. 9/20","B. 1/4","C. 2/5","D. 7/20"],"C","4, 8, 12, 16, 20, 5, 10, 15 = 8 dari 20"],
+[7,"PG","Kotak 10 bola, 4 merah. Berapa bola merah ditambahkan agar peluang merah menjadi 1/2?",["A. 2","B. 3","C. 4","D. 5"],"A","(4 + x) ÷ (10 + x) = 1/2, x = 2"],
+[7,"PG Kompleks","Kantong berisi 3 merah, 2 biru, 5 hijau. Pilih semua pernyataan benar.",["A. Peluang merah = 3/10","B. Peluang biru = 1/3","C. Peluang kuning = 0","D. Peluang hijau = 2/5","E. Peluang bukan merah = 3/10"],"A, C","Biru 1/5; hijau 1/2; bukan merah 7/10"],
+[7,"PG Kompleks","Kartu 1 sampai 10. Pilih semua kejadian yang peluangnya 3/10.",["A. Bilangan lebih dari 7","B. Bilangan genap","C. Bilangan prima","D. Kelipatan 3","E. Bilangan kurang dari 4"],"A, D, E","Genap 5/10; prima 4/10"],
+[8,"PG","Rombongan 45 orang menyewa angkot, tiap angkot 12 penumpang, sewa Rp180.000. Biaya dibagi rata, tiap orang ….",["A. Rp15.000","B. Rp16.000","C. Rp18.000","D. Rp14.400"],"B","Butuh 4 angkot = 720.000; 720.000 ÷ 45 = 16.000"],
+[8,"PG","Resep dodol 5 porsi butuh 3/4 kg ketan. Untuk 20 porsi, harga ketan Rp16.000/kg, biaya ketan ….",["A. Rp48.000","B. Rp36.000","C. Rp64.000","D. Rp52.000"],"A","20 porsi = 4 kali, 3 kg; 3 × 16.000 = 48.000"],
+[8,"PG","Rombongan 40 orang ke Situ Bagendit. Tiket Rp5.000/orang, sewa bus Rp1.200.000, parkir Rp20.000. Biaya rata-rata per orang ….",["A. Rp35.000","B. Rp30.500","C. Rp36.000","D. Rp35.500"],"D","200.000 + 1.200.000 + 20.000 = 1.420.000; ÷ 40 = 35.500"],
+[8,"PG Kompleks","Kantin bermodal Rp240.000, menjual 60 porsi @Rp5.000. Pilih semua pernyataan benar.",["A. Keuntungan Rp50.000","B. Pendapatan Rp300.000","C. Harga impas Rp4.000 per porsi","D. Kantin rugi","E. Keuntungan Rp60.000"],"B, C, E","300.000 − 240.000 = 60.000; impas 240.000 ÷ 60 = 4.000"],
+[8,"PG Kompleks","Kebun jeruk 8 baris × 15 pohon. 2/5 pohon berbuah, tiap pohon 25 kg, dijual Rp18.000/kg. Pilih semua pernyataan benar.",["A. Seluruh pohon 120","B. Pohon berbuah 40","C. Hasil panen 1.200 kg","D. Pendapatan Rp21.600.000","E. Pohon tidak berbuah 62"],"A, C, D","Berbuah 48, tidak berbuah 72; 1.200 × 18.000 = 21.600.000"]
+];
+D.sort(function(a,b){return a[0]-b[0]});var cur=-1,list=D.slice(),i=0,card=document.getElementById("card");
+function tabs(){var t=document.getElementById("tabs");t.innerHTML="";
+ ["Semua"].concat(M.map(function(m,k){return "Misi "+(k+1)+" · "+m})).forEach(function(n,k){
+  var b=document.createElement("button");b.textContent=n;b.className=(k-1===cur)?"on":"";
+  b.onclick=function(){cur=k-1;list=D.filter(function(x){return cur<0||x[0]===cur});i=0;tabs();show()};t.appendChild(b)})}
+function show(){var d=list[i];card.classList.remove("flip");
+ document.getElementById("f").innerHTML='<div class="tag">Misi '+(d[0]+1)+' · '+M[d[0]]+' · '+d[1]+'</div><div class="q">'+d[2]+'</div><ul class="opts">'+d[3].map(function(o){return "<li>"+o+"</li>"}).join("")+'</ul><div class="hint">Ketuk untuk melihat jawaban</div>';
+ document.getElementById("b").innerHTML='<div class="tag">Jawaban</div><div class="ans">'+d[4]+'</div><div class="exp">'+d[5]+'</div><div class="hint">Ketuk untuk kembali ke soal</div>';
+ document.getElementById("cnt").textContent=(i+1)+" / "+list.length}
+card.onclick=function(){card.classList.toggle("flip")};
+document.getElementById("next").onclick=function(){i=(i+1)%list.length;show()};
+document.getElementById("prev").onclick=function(){i=(i-1+list.length)%list.length;show()};
+document.getElementById("shuf").onclick=function(){list.sort(function(){return Math.random()-.5});i=0;show()};
+document.addEventListener("keydown",function(e){if(e.key==="ArrowRight")document.getElementById("next").click();if(e.key==="ArrowLeft")document.getElementById("prev").click();if(e.key===" "){e.preventDefault();card.click()}});
+tabs();show();
+</script>
+</body>
+</html>
